@@ -52,7 +52,7 @@ foreach ($file in $sourceFiles) {
 
 $codeFiles = @(Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'Source') -File -Recurse -Filter '*.cs')
 $codeText = (($codeFiles | ForEach-Object { Get-Content -Raw -LiteralPath $_.FullName }) -join "`n")
-$maintainerNamePattern = '(?i)\b(?:Antigravity|Helium|Cromite)\b|\bIsAntigravity\w*\b|\bIsBrowserItem\b'
+$maintainerNamePattern = '(?i)\b(?:Antigravity|Helium|Cromite|Weixin|Wechat|Jianying|OpenCode)\b|\bIsAntigravity\w*\b|\bIsBrowserItem\b|OpenAI\.Codex'
 $titleArgumentPattern = '(?i)(?:Title|item\.Title).*(?:Helium|Chrome|Cromite)|(?:Helium|Chrome|Cromite).*(?:Title|item\.Title)'
 Require ($codeText -notmatch $maintainerNamePattern) 'Maintainer-specific application names or special-case helpers remain in public C# source.'
 Require ($codeText -notmatch $titleArgumentPattern) 'Public source still couples custom titles to browser launch arguments.'

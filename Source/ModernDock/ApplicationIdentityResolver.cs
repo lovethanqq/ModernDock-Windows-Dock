@@ -216,8 +216,8 @@ namespace MyCustomDock
         private static bool IsPathTokenCharacter(char value)
         {
             // Package identities commonly continue with '_' or '-' after the
-            // configured token (for example OpenAI.Codex_...); only letters and
-            // digits make a token boundary unsafe here.
+            // configured token; only letters and digits make a token boundary
+            // unsafe here.
             return char.IsLetterOrDigit(value);
         }
 
@@ -230,9 +230,6 @@ namespace MyCustomDock
             {
                 return "steam";
             }
-            if (PathContainsDirectory(normalizedPath, @"\\Tencent\\Weixin\\")) return "weixin";
-            if (PathContainsDirectory(normalizedPath, @"\\@opencode-aidesktop\\")) return "opencode";
-            if (PathContainsDirectory(normalizedPath, @"\\JianyingPro\\")) return "jianying";
             return string.Empty;
         }
 
@@ -244,7 +241,6 @@ namespace MyCustomDock
 
             string name = (processName ?? string.Empty).Trim().ToLowerInvariant();
             if (name == "steam" || name == "steamwebhelper") return "steam";
-            if (name == "weixin" || name == "wechat") return "weixin";
             return string.Empty;
         }
 
