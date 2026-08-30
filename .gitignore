@@ -1,0 +1,15 @@
+# Build outputs and local IDE state
+/Build/
+/.vs/
+*.suo
+*.user
+
+# Local runtime state (never commit a user's config or icons)
+dock_config.txt
+!Config/dock_config.txt
+dock_metadata.json
+Icons/
+*.log
+
+# Local release staging
+/artifacts/

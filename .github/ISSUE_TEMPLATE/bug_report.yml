@@ -1,0 +1,56 @@
+name: Bug report / Bug 报告
+description: Report a reproducible problem in ModernDock / 报告可复现的问题
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please remove personal paths, usernames, logs, screenshots and private configuration before submitting.
+        提交前请删除个人路径、用户名、日志、截图和私人配置。
+  - type: input
+    id: version
+    attributes:
+      label: Version / 版本
+      description: Release tag or commit / 发布标签或 commit
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version / Windows 版本
+      placeholder: Windows 11 24H2, build number
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps / 复现步骤
+      description: Include the smallest safe reproduction you can provide / 请提供最小且安全的复现步骤
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior / 预期与实际行为
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment details / 环境信息
+      description: DPI, monitor setup, process path or window class if relevant; sanitize private values / 如相关，请提供 DPI、显示器、进程路径或窗口类名，并脱敏
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety checklist / 安全检查
+      options:
+        - label: I removed private paths, credentials and user configuration. / 我已删除私人路径、凭据和用户配置。
+          required: true
+        - label: This report does not require sharing a secret or private log. / 此报告不需要分享秘密或私人日志。
+          required: true

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Any CPU</Platform>
+    <ProjectGuid>{E050CAA9-473B-448A-B197-DD8D37042CBD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MyCustomDock</RootNamespace>
+    <AssemblyName>ModernDock</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>MyCustomDock.EntryPoint</StartupObject>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' And ('$(Platform)' == 'Any CPU' Or '$(Platform)' == 'AnyCPU') ">
+    <OutputPath>Build\Debug\</OutputPath>
+    <IntermediateOutputPath>Build\obj\Debug\</IntermediateOutputPath>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' And ('$(Platform)' == 'Any CPU' Or '$(Platform)' == 'AnyCPU') ">
+    <OutputPath>Build\Release\</OutputPath>
+    <IntermediateOutputPath>Build\obj\Release\</IntermediateOutputPath>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Source\ModernDockApp.cs" />
+    <Compile Include="Source\ModernDock\NativeConstants.cs" />
+    <Compile Include="Source\ModernDock\WindowSnapshot.cs" />
+    <Compile Include="Source\ModernDock\ApplicationIdentity.cs" />
+    <Compile Include="Source\ModernDock\ApplicationIdentityResolver.cs" />
+    <Compile Include="Source\ModernDock\FixedItemMatcher.cs" />
+    <Compile Include="Source\ModernDock\ShellIdentityResolver.cs" />
+    <Compile Include="Source\ModernDock\SingleInstanceGuard.cs" />
+    <Compile Include="Source\ModernDock\AtomicFileWriter.cs" />
+    <Compile Include="Source\ModernDock\StartupPathPolicy.cs" />
+    <Compile Include="Source\ModernDock\FixedItemOrder.cs" />
+    <Compile Include="Source\ModernDock\IconService.cs" />
+    <Compile Include="Source\ModernDock\IconVisualNormalizer.cs" />
+    <Compile Include="Source\ModernDock\SystemInfoFormatter.cs" />
+    <Compile Include="Source\ModernDock\MatchingFieldUpdater.cs" />
+    <Compile Include="Source\ModernDock\AudioStateReader.cs" />
+    <Compile Include="Source\ModernDock\RefreshPhaseProfiler.cs" />
+    <Compile Include="Source\ModernDock\FullscreenWindowPolicy.cs" />
+    <Compile Include="Source\ModernDock\DockDropService.cs" />
+    <Compile Include="Source\ModernDock\DockMetadataStore.cs" />
+    <Compile Include="Source\ModernDock\LaunchTargetResolver.cs" />
+    <Compile Include="Source\ModernDock\IconUpgradeService.cs" />
+    <Compile Include="Source\ModernDock\VolumeFlyout.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

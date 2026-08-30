@@ -1,0 +1,38 @@
+name: Feature request / 功能建议
+description: Suggest a focused improvement / 提议一个聚焦的改进
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ModernDock aims to stay a lightweight Windows Dock, not a second taskbar.
+        ModernDock 的定位是轻量 Windows Dock，不是第二套任务栏。
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and motivation / 问题与动机
+      description: What user problem would this solve? / 这个建议要解决什么用户问题？
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior / 建议行为
+      description: Describe the smallest useful version / 描述最小可用方案
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered / 已考虑的替代方案
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope checklist / 范围检查
+      options:
+        - label: This proposal does not require bundling third-party application logos. / 方案不需要捆绑第三方应用 Logo。
+          required: true
+        - label: This proposal can respect BackgroundSafe testing. / 方案可以遵守 BackgroundSafe 测试约束。
+          required: true

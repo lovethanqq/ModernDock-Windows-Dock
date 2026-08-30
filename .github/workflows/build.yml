@@ -1,0 +1,29 @@
+name: Build and public-safe probes
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build Debug
+        run: msbuild ModernDock.sln /t:Rebuild /p:Configuration=Debug /p:Platform="Any CPU"
+
+      - name: Build Release
+        run: msbuild ModernDock.sln /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Run public-safe probe
+        shell: pwsh
+        run: .\Scripts\public_smoke_probe.ps1 -ProjectRoot $env:GITHUB_WORKSPACE
+
+      - name: Verify release package contract
+        shell: pwsh
+        run: .\Scripts\package_release.ps1
