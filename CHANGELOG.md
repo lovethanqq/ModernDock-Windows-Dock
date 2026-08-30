@@ -2,6 +2,13 @@
 
 [简体中文](CHANGELOG.zh-CN.md) | English
 
+## 0.1.1 — Public cleanup release
+
+- Removed maintainer-specific title-based launch behavior.
+- Generalized window restore behavior to use real Windows placement state.
+- Replaced the public launcher icon special case with generic launcher/host handling.
+- No configuration format change.
+
 ## 0.1.0 — First public release
 
 - Application-identity based one-app/one-icon grouping

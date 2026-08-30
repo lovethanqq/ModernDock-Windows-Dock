@@ -31,6 +31,8 @@ ModernDock 的定位是轻量 Windows Dock，不是第二套任务栏、通知�
 
 ## 安装
 
+最新版本：[v0.1.1 — 公共清理版本](https://github.com/lovethanqq/ModernDock-Windows-Dock/releases/tag/v0.1.1)
+
 1. 从 [Releases](https://github.com/lovethanqq/ModernDock-Windows-Dock/releases) 下载发布 ZIP。
 2. 解压到临时目录。
 3. 在该目录打开 PowerShell，运行：

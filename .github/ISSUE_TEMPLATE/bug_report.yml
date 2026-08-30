@@ -14,7 +14,7 @@ body:
     attributes:
       label: Version / 版本
       description: Release tag or commit / 发布标签或 commit
-      placeholder: v0.1.0
+      placeholder: v0.1.1
     validations:
       required: true
   - type: input

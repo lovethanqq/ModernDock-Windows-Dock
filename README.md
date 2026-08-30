@@ -31,6 +31,8 @@ ModernDock is intended to stay a small Windows Dock, not become a second Windows
 
 ## Install
 
+Latest release: [v0.1.1 — Public Cleanup Release](https://github.com/lovethanqq/ModernDock-Windows-Dock/releases/tag/v0.1.1)
+
 1. Download the release ZIP from [Releases](https://github.com/lovethanqq/ModernDock-Windows-Dock/releases).
 2. Extract it to a temporary folder.
 3. Open PowerShell in that folder and run:

@@ -1,6 +1,8 @@
 [CmdletBinding()]
 param(
-    [string]$OutputDirectory = ''
+    [string]$OutputDirectory = '',
+    [ValidatePattern('^v?\d+\.\d+\.\d+$')]
+    [string]$Version = '0.1.1'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -16,8 +18,12 @@ if (-not (Test-Path -LiteralPath $releaseExe -PathType Leaf)) {
     throw 'Build\Release\ModernDock.exe is missing. Build the Release configuration first.'
 }
 
-$staging = Join-Path $OutputDirectory 'ModernDock-v0.1.0-staging'
-$zipPath = Join-Path $OutputDirectory 'ModernDock-v0.1.0.zip'
+$normalizedVersion = $Version.Trim()
+if (-not $normalizedVersion.StartsWith('v', [System.StringComparison]::OrdinalIgnoreCase)) {
+    $normalizedVersion = 'v' + $normalizedVersion
+}
+$staging = Join-Path $OutputDirectory ("ModernDock-" + $normalizedVersion + '-staging')
+$zipPath = Join-Path $OutputDirectory ("ModernDock-" + $normalizedVersion + '.zip')
 if (Test-Path -LiteralPath $staging) { Remove-Item -LiteralPath $staging -Recurse -Force }
 if (Test-Path -LiteralPath $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
 New-Item -ItemType Directory -Force -Path $staging | Out-Null
