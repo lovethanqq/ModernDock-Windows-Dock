@@ -28,7 +28,6 @@ namespace MyCustomDock
             if (item == null || !item.IsFixed || IsCustomOverride(item.IconFile)) return false;
 
             string targetPath = item.TargetPath ?? string.Empty;
-            if (IsAntigravityLauncher(item, targetPath)) return false;
 
             BitmapSource current = LoadBitmap(currentIconPath);
             double currentScore = ScoreBitmap(current, "persisted_config_png");
@@ -49,29 +48,32 @@ namespace MyCustomDock
                 }
             }
 
-            string targetDirectory = SafeDirectoryName(targetPath);
-            if (!string.IsNullOrEmpty(targetDirectory) && Directory.Exists(targetDirectory))
+            if (!IsLauncherHostPath(targetPath))
             {
-                string[] files = GetImmediateImageFiles(targetDirectory);
-                foreach (string file in files)
+                string targetDirectory = SafeDirectoryName(targetPath);
+                if (!string.IsNullOrEmpty(targetDirectory) && Directory.Exists(targetDirectory))
                 {
-                    BitmapSource bitmap = LoadBitmap(file);
-                    if (bitmap == null) continue;
-                    IconCandidate asset = CreateCandidate(
-                        "install_directory_asset", file, Path.GetFileName(file), bitmap);
-                    if (IsBetterCandidate(asset, best)) best = asset;
+                    string[] files = GetImmediateImageFiles(targetDirectory);
+                    foreach (string file in files)
+                    {
+                        BitmapSource bitmap = LoadBitmap(file);
+                        if (bitmap == null) continue;
+                        IconCandidate asset = CreateCandidate(
+                            "install_directory_asset", file, Path.GetFileName(file), bitmap);
+                        if (IsBetterCandidate(asset, best)) best = asset;
+                    }
                 }
-            }
 
-            if (File.Exists(targetPath))
-            {
-                ImageSource source = IconService.ExtractBest(targetPath);
-                BitmapSource bitmap = source as BitmapSource;
-                if (bitmap != null)
+                if (File.Exists(targetPath))
                 {
-                    IconCandidate executable = CreateCandidate(
-                        "exe_resource_or_shell_icon", targetPath, "IconService.ExtractBest", bitmap);
-                    if (IsBetterCandidate(executable, best)) best = executable;
+                    ImageSource source = IconService.ExtractBest(targetPath);
+                    BitmapSource bitmap = source as BitmapSource;
+                    if (bitmap != null)
+                    {
+                        IconCandidate executable = CreateCandidate(
+                            "exe_resource_or_shell_icon", targetPath, "IconService.ExtractBest", bitmap);
+                        if (IsBetterCandidate(executable, best)) best = executable;
+                    }
                 }
             }
 
@@ -80,10 +82,10 @@ namespace MyCustomDock
             return true;
         }
 
-        // Antigravity may be launched through cmd.exe, so its fixed TargetPath
-        // is intentionally not a valid icon source. Only a window that the
-        // fixed matcher has already attributed to this item can contribute a
-        // process-resource or WM_GETICON candidate.
+        // A fixed item launched through a generic host should use only a
+        // process or window icon from a window already attributed to that item.
+        // This keeps launcher/host icons from replacing the user's application
+        // identity without tying the behavior to a product name.
         public static bool TryFindWindowIconCandidate(
             DockItem item,
             string currentIconPath,
@@ -91,7 +93,7 @@ namespace MyCustomDock
             out IconCandidate candidate)
         {
             candidate = null;
-            if (!IsAntigravityItem(item) || windows == null || IsCustomOverride(item.IconFile)) return false;
+            if (item == null || !item.IsFixed || windows == null || IsCustomOverride(item.IconFile)) return false;
 
             BitmapSource current = LoadBitmap(currentIconPath);
             double currentScore = ScoreBitmap(current, "persisted_config_png");
@@ -105,7 +107,7 @@ namespace MyCustomDock
                 BitmapSource processBitmap = null;
                 string processPath = window.ProcessPath ?? string.Empty;
                 if (!string.IsNullOrWhiteSpace(processPath) && File.Exists(processPath) &&
-                    !ApplicationIdentityResolver.IsGenericLauncherOrHostPath(processPath))
+                    !IsLauncherHostPath(processPath))
                 {
                     processBitmap = IconService.ExtractBest(processPath) as BitmapSource;
                     if (processBitmap != null)
@@ -146,16 +148,9 @@ namespace MyCustomDock
                     iconFile.StartsWith("custom-", StringComparison.OrdinalIgnoreCase));
         }
 
-        private static bool IsAntigravityLauncher(DockItem item, string targetPath)
+        public static bool IsLauncherHostPath(string path)
         {
-            if (!IsAntigravityItem(item)) return false;
-            return string.Equals(SafeFileName(targetPath), "cmd.exe", StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static bool IsAntigravityItem(DockItem item)
-        {
-            return item != null &&
-                (item.Title ?? string.Empty).IndexOf("Antigravity", StringComparison.OrdinalIgnoreCase) >= 0;
+            return ApplicationIdentityResolver.IsGenericLauncherOrHostPath(path);
         }
 
         private static bool IsRecycleItem(DockItem item)

@@ -2184,16 +2184,6 @@ namespace MyCustomDock
                             continue;
                         }
 
-                        if (item.Title.IndexOf("Helium", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            item.Title.IndexOf("Chrome", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                            item.Title.IndexOf("Cromite", StringComparison.OrdinalIgnoreCase) >= 0)
-                        {
-                            if (string.IsNullOrEmpty(item.Arguments) || item.Arguments.IndexOf("--start-maximized", StringComparison.OrdinalIgnoreCase) < 0)
-                            {
-                                item.Arguments = (item.Arguments + " --start-maximized").Trim();
-                            }
-                        }
-
                         if (item.Title == "开始菜单" || item.Title == "Start Menu") item.CustomAction = () => { SendWinKey(); };
 
                         item.IconSource = LoadFixedItemIcon(item);
@@ -2574,7 +2564,7 @@ namespace MyCustomDock
                         string windowTitle = GetShortWindowTitle(window);
                         menuStack.Children.Add(CreateFluentRow("　", windowTitle, () => {
                             popup.IsOpen = false;
-                            ToggleWindow(window.Handle, IsBrowserItem(item), false);
+                            ToggleWindow(window.Handle, false);
                         }));
                     }
                 }
@@ -2713,14 +2703,6 @@ namespace MyCustomDock
         }
 
         private const int MaxWindowTitleLength = 32;
-
-        private bool IsBrowserItem(DockItem item)
-        {
-            string title = item == null ? string.Empty : (item.Title ?? string.Empty);
-            return title.IndexOf("Helium", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   title.IndexOf("Chrome", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                   title.IndexOf("Cromite", StringComparison.OrdinalIgnoreCase) >= 0;
-        }
 
         public bool SetCustomIcon(DockItem item, string sourcePath)
         {
@@ -3395,7 +3377,7 @@ namespace MyCustomDock
                 string iconPath = System.IO.Path.Combine(iconDirectory, item.IconFile);
                 IconCandidate candidate = null;
                 bool found = false;
-                if ((item.Title ?? string.Empty).IndexOf("Antigravity", StringComparison.OrdinalIgnoreCase) >= 0)
+                if (IconUpgradeService.IsLauncherHostPath(item.TargetPath))
                 {
                     found = IconUpgradeService.TryFindWindowIconCandidate(
                         item, iconPath, GetTopLevelWindows(true, null), out candidate);
@@ -3533,7 +3515,7 @@ namespace MyCustomDock
                     }
                     if (representative != IntPtr.Zero)
                     {
-                        ToggleWindow(representative, false, forceMinimize);
+                        ToggleWindow(representative, forceMinimize);
                         return;
                     }
                 }
@@ -3548,11 +3530,9 @@ namespace MyCustomDock
                     }
                 }
 
-                bool isBrowser = IsBrowserItem(item);
-
                 if (matchingWindows.Count > 0)
                 {
-                    ToggleWindow(matchingWindows[0].Handle, isBrowser, forceMinimize);
+                    ToggleWindow(matchingWindows[0].Handle, forceMinimize);
                     return;
                 }
 
@@ -3567,7 +3547,7 @@ namespace MyCustomDock
             }
         }
 
-        private void ToggleWindow(IntPtr hWnd, bool alwaysMaximizeOnRestore, bool forceMinimize)
+        private void ToggleWindow(IntPtr hWnd, bool forceMinimize)
         {
             try
             {
@@ -3601,8 +3581,7 @@ namespace MyCustomDock
                     wp.length = Marshal.SizeOf(typeof(WINDOWPLACEMENT));
                     GetWindowPlacement(hWnd, ref wp);
 
-                    bool wasMaximized = alwaysMaximizeOnRestore ||
-                                        (wp.flags & WPF_RESTORETOMAXIMIZED) != 0 ||
+                    bool wasMaximized = (wp.flags & WPF_RESTORETOMAXIMIZED) != 0 ||
                                         (wp.showCmd == SW_SHOWMAXIMIZED) ||
                                         (wp.showCmd == SW_MAXIMIZE);
 

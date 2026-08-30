@@ -50,6 +50,17 @@ foreach ($file in $sourceFiles) {
     }
 }
 
+$codeFiles = @(Get-ChildItem -LiteralPath (Join-Path $ProjectRoot 'Source') -File -Recurse -Filter '*.cs')
+$codeText = (($codeFiles | ForEach-Object { Get-Content -Raw -LiteralPath $_.FullName }) -join "`n")
+$maintainerNamePattern = '(?i)\b(?:Antigravity|Helium|Cromite)\b|\bIsAntigravity\w*\b|\bIsBrowserItem\b'
+$titleArgumentPattern = '(?i)(?:Title|item\.Title).*(?:Helium|Chrome|Cromite)|(?:Helium|Chrome|Cromite).*(?:Title|item\.Title)'
+Require ($codeText -notmatch $maintainerNamePattern) 'Maintainer-specific application names or special-case helpers remain in public C# source.'
+Require ($codeText -notmatch $titleArgumentPattern) 'Public source still couples custom titles to browser launch arguments.'
+Require ($codeText -notmatch '(?i)item\.Arguments\s*=.*--start-maximized') 'Public source still injects --start-maximized into configured arguments.'
+Require ($codeText -match '(?i)GetWindowPlacement') 'Generic window restore state must use GetWindowPlacement.'
+Require ($codeText -match '(?i)WINDOWPLACEMENT') 'Generic window restore state must define WINDOWPLACEMENT.'
+Require ($codeText -match '(?i)IsLauncherHostPath') 'Launcher/host icon handling must use a generic path predicate.'
+
 if ($failures.Count -gt 0) {
     $failures | ForEach-Object { Write-Error $_ }
     Write-Output 'RED [PublicSmokeProbe]'
